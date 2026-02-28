@@ -1,0 +1,85 @@
+@model SampleMVCApplication.Models.Product
+
+@{
+    ViewBag.Title = "Create New Product";
+}
+
+<main>
+  <h2>Create New Product</h2>
+    <hr />
+
+    @* Display validation summary *@
+    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+    @* Form posts to Create action *@
+    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { @class = "needs-validation" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+   <div class="col-md-6">
+           <div class="form-group mb-3">
+     @Html.LabelFor(m => m.Name, new { @class = "form-label" })
+ @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter product name" })
+       @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+  </div>
+
+         <div class="form-group mb-3">
+   @Html.LabelFor(m => m.Price, new { @class = "form-label" })
+             @Html.TextBoxFor(m => m.Price, new { @class = "form-control", type = "number", step = "0.01", min = "0" })
+        @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+    </div>
+
+  <div class="form-group mb-3">
+           @Html.LabelFor(m => m.Category, new { @class = "form-label" })
+   @Html.DropDownListFor(m => m.Category, 
+              new SelectList(ViewBag.Categories), 
+         "-- Select Category --", 
+      new { @class = "form-select" })
+   @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
+        </div>
+
+           <div class="form-group mb-3">
+   <div class="form-check">
+         @Html.CheckBoxFor(m => m.IsAvailable, new { @class = "form-check-input" })
+         @Html.LabelFor(m => m.IsAvailable, new { @class = "form-check-label" })
+   </div>
+      </div>
+ </div>
+
+            <div class="col-md-6">
+    <div class="form-group mb-3">
+                 @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+    @Html.TextAreaFor(m => m.Description, 5, 50, new { @class = "form-control", placeholder = "Enter product description" })
+      @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+       </div>
+            </div>
+        </div>
+
+        <div class="form-group mt-3">
+          <button type="submit" class="btn btn-success">
+<i class="bi bi-plus-circle"></i> Create Product
+       </button>
+         @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+    }
+
+    <hr class="my-4" />
+    
+    <div class="alert alert-info">
+        <h5>MVC Form Submission Flow:</h5>
+        <ol>
+            <li><strong>GET Request:</strong> ProductController.Create() ? returns empty form</li>
+            <li><strong>User fills form</strong> with product details</li>
+            <li><strong>POST Request:</strong> Form data submitted to ProductController.Create(Product model)</li>
+          <li><strong>Model Binding:</strong> ASP.NET maps form fields to Product properties automatically</li>
+            <li><strong>Validation:</strong> Data annotations validate the model</li>
+      <li><strong>If Valid:</strong> Controller ? ProductRepository.Add() ? saves data ? redirect to Index</li>
+     <li><strong>If Invalid:</strong> Controller returns same view with validation errors</li>
+        </ol>
+    </div>
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,104 @@
+@model List<SampleMVCApplication.Models.Product>
+
+@{
+    ViewBag.Title = "Products";
+}
+
+<main>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+<h2>Product Catalog</h2>
+   @Html.ActionLink("Create New Product", "Create", null, new { @class = "btn btn-success" })
+    </div>
+
+    @* Display success message if any *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+      @TempData["SuccessMessage"]
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+    }
+
+    @* Category filter *@
+    <div class="mb-3">
+ <label>Filter by Category:</label>
+        <div class="btn-group" role="group">
+ @Html.ActionLink("All", "Index", null, new { @class = string.IsNullOrEmpty(ViewBag.SelectedCategory) ? "btn btn-primary" : "btn btn-outline-primary" })
+        @foreach (var category in ViewBag.Categories)
+   {
+       var isSelected = category == ViewBag.SelectedCategory;
+      @Html.ActionLink(category, "Index", new { category = category }, new { @class = isSelected ? "btn btn-primary" : "btn btn-outline-primary" })
+}
+   </div>
+    </div>
+
+    @* Product list *@
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">
+     No products found. @Html.ActionLink("Create your first product", "Create").
+  </div>
+    }
+    else
+    {
+    <div class="table-responsive">
+            <table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+     <th>Name</th>
+    <th>Description</th>
+          <th>Price</th>
+   <th>Category</th>
+            <th>Status</th>
+            <th>Actions</th>
+      </tr>
+  </thead>
+     <tbody>
+         @foreach (var product in Model)
+         {
+            <tr>
+     <td>@product.Id</td>
+          <td><strong>@product.Name</strong></td>
+ <td>@product.Description</td>
+              <td>@product.Price.ToString("C")</td>
+    <td><span class="badge bg-info">@product.Category</span></td>
+       <td>
+   @if (product.IsAvailable)
+   {
+      <span class="badge bg-success">In Stock</span>
+               }
+           else
+    {
+  <span class="badge bg-danger">Out of Stock</span>
+        }
+       </td>
+            <td>
+  @Html.ActionLink("Details", "Details", new { id = product.Id }, new { @class = "btn btn-sm btn-info" })
+       @Html.ActionLink("Edit", "Edit", new { id = product.Id }, new { @class = "btn btn-sm btn-warning" })
+                @Html.ActionLink("Delete", "Delete", new { id = product.Id }, new { @class = "btn btn-sm btn-danger" })
+        </td>
+       </tr>
+              }
+           </tbody>
+       </table>
+   </div>
+    }
+
+    <hr class="my-4" />
+    
+    <div class="alert alert-info">
+        <h5>MVC Flow Demonstrated Here:</h5>
+        <ol>
+            <li><strong>Controller ? Model:</strong> ProductController calls ProductRepository.GetAll()</li>
+            <li><strong>Model ? Controller:</strong> Repository returns List&lt;Product&gt;</li>
+    <li><strong>Controller ? View:</strong> Controller passes list to this View</li>
+            <li><strong>View:</strong> Displays data using Razor syntax (@Model, @foreach)</li>
+            <li><strong>View ? Controller:</strong> Links/buttons trigger new Controller actions</li>
+        </ol>
+        <p class="mb-0">
+            <strong>Try it:</strong> Click "Create New Product", fill the form, and submit. 
+    You'll see the complete flow: View ? Controller ? Model ? Controller ? View
+    </p>
+  </div>
+</main>

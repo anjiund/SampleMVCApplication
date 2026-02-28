@@ -1,0 +1,38 @@
+@model SampleMVCApplication.Models.AboutViewModel
+
+@{
+    ViewBag.Title = "About (Strongly-Typed)";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@Model.Title</h2>
+    <h3>@Model.Message</h3>
+
+    <div class="row mt-4">
+<div class="col-md-6">
+     <h4>Company Information</h4>
+     <dl class="row">
+         <dt class="col-sm-4">Company Name:</dt>
+         <dd class="col-sm-8">@Model.CompanyName</dd>
+
+                <dt class="col-sm-4">Founded:</dt>
+         <dd class="col-sm-8">@Model.FoundedDate.ToString("MMMM dd, yyyy")</dd>
+            </dl>
+        </div>
+
+  <div class="col-md-6">
+            <h4>Key Features</h4>
+            <ul class="list-group">
+           @foreach (var feature in Model.Features)
+   {
+         <li class="list-group-item">@feature</li>
+          }
+            </ul>
+        </div>
+    </div>
+
+  <div class="alert alert-info mt-4" role="alert">
+        <strong>Notice:</strong> This view uses a strongly-typed model (@Model.GetType().Name) 
+which provides IntelliSense, compile-time checking, and better maintainability.
+    </div>
+</main>

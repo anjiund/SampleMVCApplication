@@ -1,0 +1,76 @@
+@model SampleMVCApplication.Models.Product
+
+@{
+    ViewBag.Title = "Product Details";
+}
+
+<main>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Product Details</h2>
+        <div>
+  @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+         @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+       <h3>@Model.Name</h3>
+ </div>
+        <div class="card-body">
+      <dl class="row">
+ <dt class="col-sm-3">Product ID:</dt>
+     <dd class="col-sm-9">@Model.Id</dd>
+
+   <dt class="col-sm-3">Name:</dt>
+         <dd class="col-sm-9">@Model.Name</dd>
+
+       <dt class="col-sm-3">Description:</dt>
+    <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? "No description" : Model.Description)</dd>
+
+<dt class="col-sm-3">Price:</dt>
+     <dd class="col-sm-9"><strong class="text-success">@Model.Price.ToString("C")</strong></dd>
+
+     <dt class="col-sm-3">Category:</dt>
+     <dd class="col-sm-9"><span class="badge bg-info">@Model.Category</span></dd>
+
+  <dt class="col-sm-3">Availability:</dt>
+  <dd class="col-sm-9">
+          @if (Model.IsAvailable)
+     {
+    <span class="badge bg-success">In Stock</span>
+      }
+   else
+    {
+             <span class="badge bg-danger">Out of Stock</span>
+        }
+  </dd>
+
+    <dt class="col-sm-3">Created Date:</dt>
+     <dd class="col-sm-9">@Model.CreatedDate.ToString("MMMM dd, yyyy 'at' h:mm tt")</dd>
+    </dl>
+     </div>
+        <div class="card-footer">
+      <div class="btn-group" role="group">
+        @Html.ActionLink("Edit This Product", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+    @Html.ActionLink("Delete This Product", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+   @Html.ActionLink("View All Products", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4" />
+    
+    <div class="alert alert-info">
+     <h5>What Happened:</h5>
+        <ol>
+   <li>You clicked a "Details" link in the product list</li>
+   <li>The link generated a URL: <code>/Product/Details/@Model.Id</code></li>
+        <li>Routing sent request to <code>ProductController.Details(id)</code></li>
+   <li>Controller called <code>ProductRepository.GetById(@Model.Id)</code></li>
+            <li>Repository returned this Product object</li>
+ <li>Controller passed it to this View</li>
+      <li>View displays the data using <code>@@Model.PropertyName</code> syntax</li>
+  </ol>
+    </div>
+</main>

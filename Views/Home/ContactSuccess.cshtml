@@ -1,0 +1,54 @@
+@model SampleMVCApplication.Models.ContactFormModel
+
+@{
+    ViewBag.Title = "Message Sent Successfully";
+}
+
+<main aria-labelledby="title">
+    <div class="alert alert-success" role="alert">
+      <h4 class="alert-heading"><i class="bi bi-check-circle"></i> Success!</h4>
+        <p>@ViewBag.SuccessMessage</p>
+    </div>
+
+    @if (Model != null)
+    {
+        <div class="card">
+<div class="card-header">
+              <h3>Message Details</h3>
+        </div>
+            <div class="card-body">
+                <dl class="row">
+   <dt class="col-sm-3">Name:</dt>
+      <dd class="col-sm-9">@Model.Name</dd>
+
+       <dt class="col-sm-3">Email:</dt>
+      <dd class="col-sm-9">@Model.Email</dd>
+
+   <dt class="col-sm-3">Subject:</dt>
+           <dd class="col-sm-9">@Model.Subject</dd>
+
+          <dt class="col-sm-3">Message:</dt>
+<dd class="col-sm-9">@Model.Message</dd>
+
+  <dt class="col-sm-3">Submitted:</dt>
+       <dd class="col-sm-9">@Model.SubmittedDate.ToString("f")</dd>
+             </dl>
+            </div>
+        </div>
+    }
+
+    <div class="mt-3">
+   @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Send Another Message", "ContactForm", "Home", null, new { @class = "btn btn-secondary" })
+    </div>
+
+    <hr class="my-4" />
+    
+    <div class="alert alert-info">
+        <h5>What Just Happened:</h5>
+      <p>
+        The Controller received your form data through Model Binding, validated it using Data Annotations,
+            processed it, and passed it to this View for display. This demonstrates the complete MVC flow!
+        </p>
+    </div>
+</main>
