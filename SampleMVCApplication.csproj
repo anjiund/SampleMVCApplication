@@ -133,13 +133,29 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AquaExpensesController.cs" />
+    <Compile Include="Controllers\AquaManagementController.cs" />
+    <Compile Include="Controllers\AquaRevenueController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AboutViewModel.cs" />
+    <Compile Include="Models\AquaExpensesDashboardViewModel.cs" />
+    <Compile Include="Models\AquaManagementDashboardViewModel.cs" />
+    <Compile Include="Models\AquaRevenueDashboardViewModel.cs" />
+    <Compile Include="Models\BagRevenue.cs" />
+    <Compile Include="Models\BagRevenueRepository.cs" />
     <Compile Include="Models\ContactFormModel.cs" />
+    <Compile Include="Models\FeedExpense.cs" />
+    <Compile Include="Models\FeedExpenseRepository.cs" />
+    <Compile Include="Models\MineralExpense.cs" />
+    <Compile Include="Models\MineralExpenseRepository.cs" />
+    <Compile Include="Models\OtherExpense.cs" />
+    <Compile Include="Models\OtherExpenseRepository.cs" />
+    <Compile Include="Models\PrawnRevenue.cs" />
+    <Compile Include="Models\PrawnRevenueRepository.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -175,6 +191,17 @@
     <Content Include="README_SUMMARY.md" />
     <Content Include="MVC_VISUAL_DIAGRAMS.md" />
     <Content Include="INDEX.md" />
+    <Content Include="AQUA_EXPENSES_README.md" />
+    <Content Include="AQUA_QUICK_START.md" />
+    <Content Include="AQUA_VISUAL_ARCHITECTURE.md" />
+    <Content Include="AQUA_COMPLETE_SUMMARY.md" />
+    <Content Include="AQUA_REVENUE_README.md" />
+    <Content Include="AQUA_COMPLETE_SYSTEM.md" />
+    <Content Include="AQUA_REVENUE_QUICK_START.md" />
+    <Content Include="AQUA_MANAGEMENT_DASHBOARD_README.md" />
+    <Content Include="AQUA_COMPLETE_SYSTEM_FINAL.md" />
+    <Content Include="README.md" />
+    <Content Include="DEPLOYMENT_GUIDE.md" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -206,6 +233,24 @@
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\AquaExpenses\Index.cshtml" />
+    <Content Include="Views\AquaExpenses\CreateFeed.cshtml" />
+    <Content Include="Views\AquaExpenses\EditFeed.cshtml" />
+    <Content Include="Views\AquaExpenses\DeleteFeed.cshtml" />
+    <Content Include="Views\AquaExpenses\CreateMineral.cshtml" />
+    <Content Include="Views\AquaExpenses\EditMineral.cshtml" />
+    <Content Include="Views\AquaExpenses\DeleteMineral.cshtml" />
+    <Content Include="Views\AquaExpenses\CreateOther.cshtml" />
+    <Content Include="Views\AquaExpenses\EditOther.cshtml" />
+    <Content Include="Views\AquaExpenses\DeleteOther.cshtml" />
+    <Content Include="Views\AquaRevenue\Index.cshtml" />
+    <Content Include="Views\AquaRevenue\CreatePrawn.cshtml" />
+    <Content Include="Views\AquaRevenue\EditPrawn.cshtml" />
+    <Content Include="Views\AquaRevenue\DeletePrawn.cshtml" />
+    <Content Include="Views\AquaRevenue\CreateBag.cshtml" />
+    <Content Include="Views\AquaRevenue\EditBag.cshtml" />
+    <Content Include="Views\AquaRevenue\DeleteBag.cshtml" />
+    <Content Include="Views\AquaManagement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

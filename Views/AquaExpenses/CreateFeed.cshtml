@@ -1,0 +1,92 @@
+@model SampleMVCApplication.Models.FeedExpense
+
+@{
+    ViewBag.Title = "Add Feed Expense";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header bg-info text-white">
+      <h3 class="mb-0"><i class="bi bi-bucket"></i> Add New Feed Expense</h3>
+    </div>
+     <div class="card-body">
+           @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+    @using (Html.BeginForm("CreateFeed", "AquaExpenses", FormMethod.Post, new { @class = "needs-validation" }))
+        {
+   @Html.AntiForgeryToken()
+
+    <div class="row">
+  <div class="col-md-6">
+  <div class="form-group mb-3">
+      @Html.LabelFor(m => m.FeedQuantity, new { @class = "form-label" })
+         <div class="input-group">
+   @Html.TextBoxFor(m => m.FeedQuantity, new { @class = "form-control", type = "number", step = "0.01", min = "0.01", placeholder = "0.00" })
+         <span class="input-group-text">kg</span>
+      </div>
+  @Html.ValidationMessageFor(m => m.FeedQuantity, "", new { @class = "text-danger" })
+ <small class="form-text text-muted">Enter quantity in kilograms</small>
+     </div>
+          </div>
+
+   <div class="col-md-6">
+       <div class="form-group mb-3">
+       @Html.LabelFor(m => m.FeedPrice, new { @class = "form-label" })
+   <div class="input-group">
+  <span class="input-group-text">$</span>
+    @Html.TextBoxFor(m => m.FeedPrice, new { @class = "form-control", type = "number", step = "0.01", min = "0.01", placeholder = "0.00" })
+       <span class="input-group-text">per kg</span>
+     </div>
+        @Html.ValidationMessageFor(m => m.FeedPrice, "", new { @class = "text-danger" })
+         <small class="form-text text-muted">Price per kilogram</small>
+          </div>
+   </div>
+       </div>
+
+        <div class="form-group mb-3">
+  @Html.LabelFor(m => m.Notes, new { @class = "form-label" })
+      @Html.TextAreaFor(m => m.Notes, 3, 50, new { @class = "form-control", placeholder = "Optional notes about this feed purchase" })
+ @Html.ValidationMessageFor(m => m.Notes, "", new { @class = "text-danger" })
+      </div>
+
+    <div class="alert alert-light border">
+      <strong>Calculated Total:</strong>
+   <span class="text-success fs-4" id="calculatedTotal">$0.00</span>
+</div>
+
+           <div class="form-group">
+      <button type="submit" class="btn btn-primary btn-lg">
+     <i class="bi bi-save"></i> Save Feed Expense
+ </button>
+       @Html.ActionLink("Cancel", "Index", new { tab = "feed" }, new { @class = "btn btn-secondary btn-lg" })
+         </div>
+  }
+     </div>
+       </div>
+
+       <div class="mt-3">
+       @Html.ActionLink("? Back to Aqua Expenses", "Index", new { tab = "feed" }, new { @class = "btn btn-link" })
+    </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+    // Calculate total amount dynamically
+        function calculateTotal() {
+    var quantity = parseFloat($('#FeedQuantity').val()) || 0;
+  var price = parseFloat($('#FeedPrice').val()) || 0;
+         var total = quantity * price;
+    $('#calculatedTotal').text('$' + total.toFixed(2));
+    }
+
+        $(document).ready(function() {
+            $('#FeedQuantity, #FeedPrice').on('input', calculateTotal);
+        calculateTotal();
+    });
+    </script>
+}

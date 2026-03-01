@@ -1,0 +1,320 @@
+@{
+    ViewBag.Title = "Aqua Expenses Form";
+    var dashboard = ViewBag.Dashboard as SampleMVCApplication.Models.AquaExpensesDashboardViewModel;
+    var activeTab = ViewBag.ActiveTab as string ?? "feed";
+}
+
+<div class="container-fluid mt-3">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+        <h1 class="text-primary">
+      <i class="bi bi-water"></i> Aqua Expenses Form
+            </h1>
+    <p class="lead text-muted">Manage your aquaculture expenses efficiently</p>
+        </div>
+</div>
+
+    <!-- Success Message -->
+    @if (ViewBag.SuccessMessage != null)
+    {
+     <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> @ViewBag.SuccessMessage
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Summary Cards -->
+<div class="row mb-4">
+        <div class="col-md-3">
+ <div class="card text-white bg-info">
+          <div class="card-body">
+      <h5 class="card-title">Feed Expenses</h5>
+           <h3 class="mb-0">@dashboard.TotalFeedExpenses.ToString("C")</h3>
+  <small>@dashboard.FeedExpenseCount entries</small>
+     </div>
+            </div>
+        </div>
+     <div class="col-md-3">
+ <div class="card text-white bg-success">
+      <div class="card-body">
+ <h5 class="card-title">Mineral Expenses</h5>
+    <h3 class="mb-0">@dashboard.TotalMineralExpenses.ToString("C")</h3>
+ <small>@dashboard.MineralExpenseCount entries</small>
+       </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+        <div class="card text-white bg-warning">
+      <div class="card-body">
+   <h5 class="card-title">Other Expenses</h5>
+<h3 class="mb-0">@dashboard.TotalOtherExpenses.ToString("C")</h3>
+     <small>@dashboard.OtherExpenseCount entries</small>
+     </div>
+          </div>
+ </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-primary">
+          <div class="card-body">
+     <h5 class="card-title">Grand Total</h5>
+          <h3 class="mb-0">@dashboard.GrandTotal.ToString("C")</h3>
+   <small>All expenses</small>
+          </div>
+</div>
+   </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs" id="expenseTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+       <a class="nav-link @(activeTab == "feed" ? "active" : "")" 
+   href="@Url.Action("Index", new { tab = "feed" })">
+       <i class="bi bi-bucket"></i> Feed
+     </a>
+ </li>
+        <li class="nav-item" role="presentation">
+       <a class="nav-link @(activeTab == "minerals" ? "active" : "")" 
+   href="@Url.Action("Index", new { tab = "minerals" })">
+    <i class="bi bi-gem"></i> Minerals
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+      <a class="nav-link @(activeTab == "other" ? "active" : "")" 
+         href="@Url.Action("Index", new { tab = "other" })">
+        <i class="bi bi-receipt"></i> Other Expenses
+            </a>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content border border-top-0 p-4 bg-white" id="expenseTabContent">
+        
+        <!-- FEED TAB -->
+   <div class="tab-pane fade @(activeTab == "feed" ? "show active" : "")" id="feed" role="tabpanel">
+       <div class="d-flex justify-content-between align-items-center mb-3">
+         <h3><i class="bi bi-bucket"></i> Feed Expenses</h3>
+        @Html.ActionLink("Add New Feed Expense", "CreateFeed", null, new { @class = "btn btn-primary" })
+</div>
+
+    @{
+                var feedExpenses = ViewBag.FeedExpenses as System.Collections.Generic.List<SampleMVCApplication.Models.FeedExpense>;
+   }
+
+            @if (feedExpenses.Count == 0)
+       {
+    <div class="alert alert-info">
+     <i class="bi bi-info-circle"></i> No feed expenses recorded yet. 
+          @Html.ActionLink("Add your first feed expense", "CreateFeed").
+                </div>
+            }
+       else
+      {
+        <div class="table-responsive">
+ <table class="table table-striped table-hover">
+     <thead class="table-dark">
+ <tr>
+       <th>Date</th>
+     <th>Feed Quantity (kg)</th>
+      <th>Feed Price/kg</th>
+    <th>Total Amount</th>
+   <th>Notes</th>
+         <th>Actions</th>
+   </tr>
+        </thead>
+          <tbody>
+            @foreach (var item in feedExpenses)
+   {
+   <tr>
+   <td>@item.DateAdded.ToString("MMM dd, yyyy")</td>
+    <td class="text-end">@item.FeedQuantity.ToString("N2")</td>
+         <td class="text-end">@item.FeedPrice.ToString("C")</td>
+    <td class="text-end"><strong>@item.TotalAmount.ToString("C")</strong></td>
+   <td>@(string.IsNullOrEmpty(item.Notes) ? "-" : item.Notes)</td>
+       <td>
+     @Html.ActionLink("Edit", "EditFeed", new { id = item.Id }, new { @class = "btn btn-sm btn-warning" })
+     @Html.ActionLink("Delete", "DeleteFeed", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+       </td>
+       </tr>
+          }
+</tbody>
+    <tfoot>
+    <tr class="table-info">
+             <td colspan="3" class="text-end"><strong>Total Feed Expenses:</strong></td>
+       <td class="text-end"><strong>@dashboard.TotalFeedExpenses.ToString("C")</strong></td>
+        <td colspan="2"></td>
+     </tr>
+        </tfoot>
+   </table>
+                </div>
+ }
+        </div>
+
+        <!-- MINERALS TAB -->
+        <div class="tab-pane fade @(activeTab == "minerals" ? "show active" : "")" id="minerals" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3><i class="bi bi-gem"></i> Mineral Expenses</h3>
+        @Html.ActionLink("Add New Mineral Expense", "CreateMineral", null, new { @class = "btn btn-success" })
+          </div>
+
+        @{
+var mineralExpenses = ViewBag.MineralExpenses as System.Collections.Generic.List<SampleMVCApplication.Models.MineralExpense>;
+         }
+
+            @if (mineralExpenses.Count == 0)
+            {
+       <div class="alert alert-info">
+         <i class="bi bi-info-circle"></i> No mineral expenses recorded yet. 
+      @Html.ActionLink("Add your first mineral expense", "CreateMineral").
+    </div>
+   }
+            else
+ {
+ <div class="table-responsive">
+          <table class="table table-striped table-hover">
+  <thead class="table-dark">
+      <tr>
+<th>Date</th>
+         <th>Mineral Type</th>
+          <th>Quantity (kg)</th>
+       <th>Price/kg</th>
+     <th>Total Amount</th>
+         <th>Notes</th>
+             <th>Actions</th>
+ </tr>
+        </thead>
+      <tbody>
+     @foreach (var item in mineralExpenses)
+  {
+           <tr>
+           <td>@item.DateAdded.ToString("MMM dd, yyyy")</td>
+          <td><span class="badge bg-success">@(string.IsNullOrEmpty(item.MineralType) ? "General" : item.MineralType)</span></td>
+       <td class="text-end">@item.Quantity.ToString("N2")</td>
+             <td class="text-end">@item.Price.ToString("C")</td>
+  <td class="text-end"><strong>@item.TotalAmount.ToString("C")</strong></td>
+               <td>@(string.IsNullOrEmpty(item.Notes) ? "-" : item.Notes)</td>
+    <td>
+      @Html.ActionLink("Edit", "EditMineral", new { id = item.Id }, new { @class = "btn btn-sm btn-warning" })
+           @Html.ActionLink("Delete", "DeleteMineral", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+    </td>
+           </tr>
+   }
+             </tbody>
+         <tfoot>
+  <tr class="table-success">
+ <td colspan="4" class="text-end"><strong>Total Mineral Expenses:</strong></td>
+    <td class="text-end"><strong>@dashboard.TotalMineralExpenses.ToString("C")</strong></td>
+         <td colspan="2"></td>
+        </tr>
+         </tfoot>
+ </table>
+         </div>
+         }
+        </div>
+
+        <!-- OTHER EXPENSES TAB -->
+        <div class="tab-pane fade @(activeTab == "other" ? "show active" : "")" id="other" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3><i class="bi bi-receipt"></i> Other Expenses</h3>
+            @Html.ActionLink("Add New Other Expense", "CreateOther", null, new { @class = "btn btn-warning" })
+         </div>
+
+     @{
+    var otherExpenses = ViewBag.OtherExpenses as System.Collections.Generic.List<SampleMVCApplication.Models.OtherExpense>;
+            }
+
+            @if (otherExpenses.Count == 0)
+ {
+        <div class="alert alert-info">
+           <i class="bi bi-info-circle"></i> No other expenses recorded yet. 
+@Html.ActionLink("Add your first other expense", "CreateOther").
+        </div>
+  }
+            else
+         {
+  <div class="table-responsive">
+      <table class="table table-striped table-hover">
+            <thead class="table-dark">
+      <tr>
+      <th>Date</th>
+           <th>Expense Name</th>
+   <th>Category</th>
+        <th>Price</th>
+  <th>Total Amount</th>
+       <th>Notes</th>
+                      <th>Actions</th>
+     </tr>
+      </thead>
+    <tbody>
+           @foreach (var item in otherExpenses)
+ {
+     <tr>
+  <td>@item.DateAdded.ToString("MMM dd, yyyy")</td>
+              <td><strong>@item.ExpenseName</strong></td>
+        <td><span class="badge bg-warning text-dark">@(string.IsNullOrEmpty(item.Category) ? "General" : item.Category)</span></td>
+        <td class="text-end">@item.Price.ToString("C")</td>
+                <td class="text-end"><strong>@item.TotalAmount.ToString("C")</strong></td>
+             <td>@(string.IsNullOrEmpty(item.Notes) ? "-" : item.Notes)</td>
+       <td>
+    @Html.ActionLink("Edit", "EditOther", new { id = item.Id }, new { @class = "btn btn-sm btn-warning" })
+    @Html.ActionLink("Delete", "DeleteOther", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+     </td>
+    </tr>
+        }
+       </tbody>
+            <tfoot>
+          <tr class="table-warning">
+             <td colspan="4" class="text-end"><strong>Total Other Expenses:</strong></td>
+               <td class="text-end"><strong>@dashboard.TotalOtherExpenses.ToString("C")</strong></td>
+        <td colspan="2"></td>
+          </tr>
+    </tfoot>
+     </table>
+   </div>
+  }
+    </div>
+    </div>
+
+    <!-- Grand Total Summary -->
+ <div class="row mt-4">
+        <div class="col-12">
+    <div class="card border-primary">
+    <div class="card-header bg-primary text-white">
+       <h4 class="mb-0"><i class="bi bi-calculator"></i> Expense Summary</h4>
+                </div>
+       <div class="card-body">
+      <div class="row">
+             <div class="col-md-3">
+        <p class="mb-1 text-muted">Feed Expenses:</p>
+   <h5 class="text-info">@dashboard.TotalFeedExpenses.ToString("C")</h5>
+                 </div>
+       <div class="col-md-3">
+      <p class="mb-1 text-muted">Mineral Expenses:</p>
+     <h5 class="text-success">@dashboard.TotalMineralExpenses.ToString("C")</h5>
+</div>
+          <div class="col-md-3">
+                <p class="mb-1 text-muted">Other Expenses:</p>
+             <h5 class="text-warning">@dashboard.TotalOtherExpenses.ToString("C")</h5>
+         </div>
+         <div class="col-md-3">
+        <p class="mb-1 text-muted">Grand Total:</p>
+       <h4 class="text-primary"><strong>@dashboard.GrandTotal.ToString("C")</strong></h4>
+     </div>
+               </div>
+           <hr />
+             <p class="mb-0 text-muted">
+    <i class="bi bi-clock"></i> Last updated: @dashboard.LastUpdated.ToString("MMM dd, yyyy 'at' h:mm tt")
+        </p>
+  </div>
+            </div>
+        </div>
+ </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+        $('.alert-dismissible').fadeOut('slow');
+   }, 5000);
+    </script>
+}

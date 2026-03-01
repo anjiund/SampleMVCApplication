@@ -1,0 +1,100 @@
+@model SampleMVCApplication.Models.OtherExpense
+
+@{
+    ViewBag.Title = "Add Other Expense";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+       <div class="card">
+       <div class="card-header bg-warning text-dark">
+      <h3 class="mb-0"><i class="bi bi-receipt"></i> Add New Other Expense</h3>
+   </div>
+    <div class="card-body">
+  @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+    @using (Html.BeginForm("CreateOther", "AquaExpenses", FormMethod.Post, new { @class = "needs-validation" }))
+      {
+     @Html.AntiForgeryToken()
+
+  <div class="row">
+    <div class="col-md-6">
+   <div class="form-group mb-3">
+  @Html.LabelFor(m => m.ExpenseName, new { @class = "form-label" })
+ @Html.TextBoxFor(m => m.ExpenseName, new { @class = "form-control", placeholder = "e.g., Electricity, Labor" })
+      @Html.ValidationMessageFor(m => m.ExpenseName, "", new { @class = "text-danger" })
+      </div>
+           </div>
+
+   <div class="col-md-6">
+ <div class="form-group mb-3">
+         @Html.LabelFor(m => m.Category, new { @class = "form-label" })
+    @if (ViewBag.Categories != null && ((System.Collections.Generic.List<string>)ViewBag.Categories).Count > 0)
+        {
+     @Html.DropDownListFor(m => m.Category,
+      new SelectList(ViewBag.Categories),
+    "-- Select or type new category --",
+new { @class = "form-select" })
+      }
+ else
+      {
+ @Html.TextBoxFor(m => m.Category, new { @class = "form-control", placeholder = "e.g., Utilities, Maintenance" })
+      }
+    @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
+    </div>
+       </div>
+    </div>
+
+   <div class="form-group mb-3">
+     @Html.LabelFor(m => m.Price, new { @class = "form-label" })
+   <div class="input-group">
+   <span class="input-group-text">$</span>
+   @Html.TextBoxFor(m => m.Price, new { @class = "form-control", type = "number", step = "0.01", min = "0.01", placeholder = "0.00" })
+    </div>
+@Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+       <small class="form-text text-muted">Total expense amount</small>
+   </div>
+
+     <div class="form-group mb-3">
+  @Html.LabelFor(m => m.Notes, new { @class = "form-label" })
+    @Html.TextAreaFor(m => m.Notes, 3, 50, new { @class = "form-control", placeholder = "Optional notes about this expense" })
+ @Html.ValidationMessageFor(m => m.Notes, "", new { @class = "text-danger" })
+    </div>
+
+       <div class="alert alert-light border">
+   <strong>Total Amount:</strong>
+ <span class="text-success fs-4" id="displayTotal">$0.00</span>
+     </div>
+
+ <div class="form-group">
+<button type="submit" class="btn btn-warning btn-lg">
+   <i class="bi bi-save"></i> Save Other Expense
+   </button>
+     @Html.ActionLink("Cancel", "Index", new { tab = "other" }, new { @class = "btn btn-secondary btn-lg" })
+  </div>
+ }
+       </div>
+            </div>
+
+   <div class="mt-3">
+   @Html.ActionLink("? Back to Aqua Expenses", "Index", new { tab = "other" }, new { @class = "btn btn-link" })
+ </div>
+   </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+  <script>
+    function displayTotal() {
+       var price = parseFloat($('#Price').val()) || 0;
+$('#displayTotal').text('$' + price.toFixed(2));
+        }
+
+        $(document).ready(function() {
+     $('#Price').on('input', displayTotal);
+    displayTotal();
+        });
+    </script>
+}
